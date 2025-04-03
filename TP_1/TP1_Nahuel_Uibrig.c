@@ -59,12 +59,12 @@ int main(void){
       return 1;
   }
   while (fread(&mascota, sizeof(pet_id_t), 1, archivo) == 1) {
-
+    
     if (mascota.edad > mascota_masvieja.edad) {
         mascota_masvieja = mascota; 
     }    
   }
-  printf("Nombre de la mascota mas vieja:%s\n", mascota_masvieja.nombre); 
+  printf("Nombre de la mascota mas vieja: %s\n", mascota_masvieja.nombre); 
   printf("Contacto de la mascota mas vieja: ");
         switch (mascota_masvieja.tipo_contacto) {
             case MAIL:
@@ -79,7 +79,7 @@ int main(void){
             default:
                 printf("Desconocido\n");
         }
-  printf("Edad de la mascota mas vieja:%.faños\n", mascota_masvieja.edad); 
+  printf("Edad de la mascota mas vieja: %.faños\n", mascota_masvieja.edad); 
   fclose(archivo);
   
   /* USER CODE END Ejercicio 1 */
@@ -103,53 +103,48 @@ int main(void){
       fclose(archivo);
       return 1;
     }
-
+  printf("----------------------------Mascotas con ID incorrecto----------------------------\n\n");  
+  printf("Nombre         Especie        ID Decimal        ID Binario\n\n");
   while (fread(&mascota, sizeof(pet_id_t), 1, archivo) == 1) {
-    id_decimal = (mascota.id >> 12) & 0b000000001111;  // Extrae los 4 bits más significativos
-    if (!((id_decimal == 1 && mascota.especie == PERRO) ||
-              (id_decimal == 2 && mascota.especie == GATO) ||
-              (id_decimal == 3 && mascota.especie == TORTUGA) ||
-              (id_decimal == 4 && mascota.especie == CONEJO) ||
-              (id_decimal == 5 && mascota.especie == PAJARO))) {
-      printf("\n----------------------------Mascotas con ID incorrecto------------------------------\n");
-      printf("Nombre:%s", mascota.nombre); 
+    id_decimal =mascota.id >> 13;  // Extrae los 3 bits más significativos
+    if (id_decimal != mascota.especie) {
+      
+      printf("%-15s", mascota.nombre); 
 
       switch (mascota.especie) {
         case PERRO:
-            printf("   Especie Perro    ");
+            printf("Perro          ");
             break;
         case GATO:
-            printf("   Especie Gato    ");
+            printf("Gato           ");
             break;
         case TORTUGA:
-            printf("   Especie Tortuga    ");
+            printf("Tortuga        ");
             break;
          case CONEJO:
-            printf("   Especie Conejo    ");
+            printf("Conejo         ");
             break;
         case PAJARO:
-            printf("   Especie Pajaro    ");
+            printf("Pajaro         ");
              break;
          default:
-            printf("   Desconocido");
+            printf("Desconocido    ");
       }
     
-      printf("ID dec:%d", id_decimal);
-      printf("ID bin:");
-      for (int i = 3; i >= 0; i--) {
-      printf("%d", (id_decimal >> i) & 1);  // Imprime cada bit de los 4 bits más significativos
-      }    
-      printf("\n----------------------------Mascotas con ID incorrecto------------------------------\n");
-      printf("\nSe corregira el ID de: %s", mascota.nombre);
-      mascota.id = ((mascota.especie & 0b000000001111) << 12) | (mascota.id & 0b0000111111111111);
+      printf("%-5d", mascota.id);
+      printf("             ");
+      for (int i = 2; i >= 0; i--) {
+      printf("%d", (mascota.id >> i) & 1);  // Imprime cada bit de los 3 bits más significativos
+      }
+
+      mascota.id = ((mascota.especie & 0b000000000111) << 13) | (mascota.id & 0b0000111111111111);
       errores++;
+      printf("\n");
     }
-    // Mostrar el ID corregido o el original si está correcto----------------------------------------------------------------------------------------------
-    printf("ID Corregido: %hu\n", mascota.id);
     fwrite(&mascota, sizeof(pet_id_t), 1, temp);
   }
   if(errores==0){
-      printf("Todos los IDs son correctos\n");
+      printf("N/A            N/A            N/A               N/A\n");
     }
   fclose(archivo);
   fclose(temp);
@@ -182,7 +177,7 @@ int main(void){
   printf("Ingrese la especie que desea buscar, opciones:\n");
   printf("PERRO\nGATO\nTORTUGA\nCONEJO\nPAJARO\n");
   scanf("%s", especie_palabra);
-  printf("Especie ingresada: %s\n", especie_palabra);
+  printf("\nEspecie ingresada: %s\n", especie_palabra);
   if (strcmp(especie_palabra, "PERRO") == 0) {
     especie_ingresada = PERRO;
   } else if (strcmp(especie_palabra, "GATO") == 0) {
@@ -198,16 +193,16 @@ int main(void){
     fclose(archivo);
     return 1;
   }
-  
-  printf("\nMascotas encontradas:\n");
-  
+  printf("\n---------------------------------Mascotas encontradas----------------------------------\n\n");
+
+  printf("Nombre         Edad        Sexo        ID\n\n");
   while (fread(&buscar, sizeof(pet_id_t), 1, archivo) == 1) {
     if(buscar.especie==especie_ingresada){
-      printf("Edad:%0.f\n", buscar.edad); 
-      printf("Nombre:%s\n", buscar.nombre); 
-      printf("Sexo:%c\n", buscar.sexo);
-      printf("ID:%hu\n", buscar.id);
-      printf("\n                               \n");
+      printf("%-15s", buscar.nombre); 
+      printf("%-12.1f", buscar.edad);
+      printf("%-12c", buscar.sexo);
+      printf("%-10hu", buscar.id);
+      printf("\n");
       encontrada++;
     }
   
@@ -215,7 +210,7 @@ int main(void){
   if(encontrada==0){
     printf("\nNo se encontraron mascotas de esa especie\n");
   }
-
+  printf("--------------------------------------------------------------------------------------\n");
   fclose(archivo);
 
   /* USER CODE END Ejercicio 3 */
