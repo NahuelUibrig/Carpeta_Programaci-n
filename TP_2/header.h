@@ -2,14 +2,14 @@
 #define header
 
 typedef enum{
-    administrador=1,
+    administrador=0,
     docente,
     no_docente,
     alumno
   }tipo_usuario_t;
   
 typedef enum{
-    activo=1,
+    activo=0,
     inactivo,
     expirado
   }status_t;
