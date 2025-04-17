@@ -22,7 +22,7 @@ typedef enum{
 
 
 int CrearUsuario();
-int IniciarSession();
+int IniciarSesion();
 int CambiarNombreClave();
 int VerEstudiantes();
 int CambiarNombreTipoUsuario();
