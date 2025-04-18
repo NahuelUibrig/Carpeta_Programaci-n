@@ -16,9 +16,14 @@ typedef enum{
   
   typedef struct{
     unsigned char tipo_usuario_status;
-    char nombre[10];
-    char clave[10];
+    char nombre[20];
+    char clave[20];
   }usuario_t;
+
+typedef enum {
+    fallo = 0,
+    funciono = 1
+  } funcion_t;
 
 
 int CrearUsuario();
