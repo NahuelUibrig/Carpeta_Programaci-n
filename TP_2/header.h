@@ -27,8 +27,8 @@ typedef enum {
 
 
 int CrearUsuario();
-int IniciarSesion();
-int CambiarNombreClave();
+int IniciarSesion(usuario_t *usuario_logeado);
+int CambiarNombreClave(usuario_t *usuario);
 int VerEstudiantes();
 int CambiarNombreTipoUsuario();
 
