@@ -2,20 +2,20 @@
 #define header
 
 typedef enum{
-    administrador=0,
+    administrador=1,
     docente,
     no_docente,
     alumno
   }tipo_usuario_t;
   
 typedef enum{
-    activo=0,
+    activo=1,
     inactivo,
     expirado
-  }status_t;
+  }estado_t;
   
   typedef struct{
-    unsigned char tipo_usuario_status;
+    unsigned char tipo_usuario_estado;
     char nombre[20];
     char clave[20];
   }usuario_t;
@@ -30,6 +30,6 @@ int CrearUsuario();
 int IniciarSesion(usuario_t *usuario_logeado);
 int CambiarNombreClave(usuario_t *usuario);
 int VerEstudiantes();
-int CambiarNombreTipoUsuario();
+int CambiarTipoUsuario();
 
 #endif
