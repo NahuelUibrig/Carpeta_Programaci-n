@@ -8,9 +8,10 @@ int CrearUsuario(){
     usuario_t usuario;
     estado_t estado;
     tipo_usuario_t tipo_usuario;
+    char nombre_ingresado[20];
     FILE *archivo;
     int tipo_temp,estado_temp;
-    archivo=fopen("credenciales.bin", "ab"); 
+    archivo=fopen("credenciales.bin", "ab+"); 
     if (archivo == NULL) { 
         perror("Error al abrir el archivo");
         return fallo;
@@ -19,13 +20,22 @@ int CrearUsuario(){
 
     /////////////////////////////NOMBRE DE USUARIO/////////////////////////////
     printf("Nombre de usuario: ");
-    fgets(usuario.nombre, sizeof(usuario.nombre), stdin);
-    usuario.nombre[strcspn(usuario.nombre, "\n")] = 0; // Eliminar '\n'
-    if (usuario.nombre[0] == '\0') {
+    fgets(nombre_ingresado, sizeof(nombre_ingresado), stdin);
+    nombre_ingresado[strcspn(nombre_ingresado, "\n")] = 0; // Eliminar '\n'
+    if (nombre_ingresado[0] == '\0') {
         printf("El nombre no puede estar vacío.\n");
         fclose(archivo);
         return fallo;
     }
+    while (fread(&usuario, sizeof(usuario_t), 1, archivo)) {
+        if(strcmp(usuario.nombre, nombre_ingresado) == 0){
+            printf("El nombre de ya se encuentra utilizado, proba otro.\n");
+            fclose(archivo);
+            return fallo;
+            
+        }
+    }
+    strcpy(usuario.nombre, nombre_ingresado);
     printf("\n");
     /////////////////////////////CLAVE DE USUARIO/////////////////////////////
     printf("Clave de usuario: ");
@@ -41,7 +51,7 @@ int CrearUsuario(){
     printf("Tipo de usuario (1 = Administrador, 2 = Docente, 3 = No Docente, 4 = Alumno): ");
     scanf("%d", &tipo_temp);
     getchar(); // limpiar \n
-    if (tipo_temp < 1 || tipo_temp > 4) {
+    if (tipo_temp < administrador || tipo_temp > alumno) {
         printf("Tipo inválido\n");
         fclose(archivo);
         return fallo;
@@ -52,7 +62,7 @@ int CrearUsuario(){
     printf("Estado (1 = Activo, 2 = Inactivo, 3 = Expirado): ");
     scanf("%d", &estado_temp);
     getchar(); // limpiar \n
-    if (estado_temp < 1 || estado_temp > 3) {
+    if (estado_temp < activo || estado_temp > expirado) {
         printf("Estado inválido\n\n");
         fclose(archivo);
         return fallo;
@@ -91,23 +101,29 @@ int IniciarSesion(usuario_t *usuario_logeado){
     while (fread(&usuario, sizeof(usuario_t), 1, archivo)) {
         if (strcmp(usuario.nombre, nombre_ingresado) == 0 && strcmp(usuario.clave, clave_ingresada) == 0) {
             estado=usuario.tipo_usuario_estado & 0b00001111;
-            if (estado == activo) {
+            
+            switch (estado)
+            {
+            case activo:
                 *usuario_logeado = usuario;
                 fclose(archivo);
                 printf("El usuario se encuentra activo.\n\n");
                 return funciono;
-            }
-            else {
+            
+            case inactivo:
+                printf("El usuario esta inactivo.\n\n");
                 fclose(archivo);
-                if (estado == inactivo)
-                    printf("El usuario está inactivo.\n\n");
-                else if (estado == expirado)
-                    printf("El usuario está expirado.\n\n");
-                else
-                    printf("El usuario tiene un estado desconocido.\n\n");
-
                 return fallo;
-            }
+            
+            case expirado:
+                printf("El usuario esta expirado.\n\n");
+                fclose(archivo);
+                return fallo;
+        
+            default:
+                printf("El usuario tiene un estado desconocido.\n\n");
+                return fallo;
+            } 
         } 
     }
         printf("Nombre o clave incorrectos.\n\n");
@@ -120,7 +136,7 @@ int CambiarNombreClave(usuario_t *usuario_logeado){
     char nombre_cambio[20];
     char clave_cambio[20];
     char clave_ingresada[20];
-    int opcion = 0, intento = 0;
+    int opcion,pos_usuario=-1,indice=0, intento = 0; 
     FILE *archivo;
 
     printf("¿Qué dato desea cambiar? (1 = Nombre, 2 = Clave) : ");
@@ -136,6 +152,7 @@ int CambiarNombreClave(usuario_t *usuario_logeado){
         printf("Ingrese el nuevo nombre: ");
         fgets(nombre_cambio, sizeof(nombre_cambio), stdin);
         nombre_cambio[strcspn(nombre_cambio, "\n")] = 0; // Eliminar '\n'
+
         if (strlen(nombre_cambio) == 0) {
             printf("El nombre no puede estar vacio.\n");
             return fallo;
@@ -156,8 +173,8 @@ int CambiarNombreClave(usuario_t *usuario_logeado){
         fgets(clave_ingresada, sizeof(clave_ingresada), stdin);
         clave_ingresada[strcspn(clave_ingresada, "\n")] = 0; // Eliminar '\n'
 
-        if (strcmp((*usuario_logeado).clave, clave_ingresada) == 0) {
-            printf("Clave correcta.\n");
+        if (strcmp(usuario_logeado->clave, clave_ingresada) == 0) {
+            printf("\nClave correcta.\n\n");
 
             archivo = fopen("credenciales.bin", "rb+");
             if (archivo == NULL) {
@@ -166,34 +183,44 @@ int CambiarNombreClave(usuario_t *usuario_logeado){
             }
 
             while (fread(&usuario, sizeof(usuario_t), 1, archivo)) {
-                if (strcmp(usuario.nombre, (*usuario_logeado).nombre) == 0 &&
-                    strcmp(usuario.clave, (*usuario_logeado).clave) == 0) {
-
-                    if (opcion == 1) {
-                        strcpy(usuario.nombre, nombre_cambio);
-                        strcpy((*usuario_logeado).nombre, nombre_cambio);
-                        
-                    } else {
-                        strcpy(usuario.clave, clave_cambio);
-                        strcpy((*usuario_logeado).clave, clave_cambio);
-                        
-                    }
-
-                    // Volver atrás un struct y sobrescribir
-                    fseek(archivo, -sizeof(usuario_t), SEEK_CUR);
-                    fwrite(&usuario, sizeof(usuario_t), 1, archivo);
+                if(opcion ==1 && strcmp(usuario.nombre, nombre_cambio) == 0 && strcmp(usuario.nombre, usuario_logeado->nombre) != 0){
                     fclose(archivo);
-
-                    printf("Dato actualizado correctamente.\n\n");
-                    return funciono;
+                    printf("El nombre ya se encuentra utilizado, proba otro.\n\n");
+                    return fallo;  
                 }
+
+                if (strcmp(usuario.nombre, usuario_logeado->nombre) == 0 &&
+                    strcmp(usuario.clave, usuario_logeado->clave) == 0) {
+                        pos_usuario=indice;// lo uso para guardar la posicion del usuario logeado
+                    }
+                    indice++;
+            }
+            if (pos_usuario == -1) {
+                fclose(archivo);
+                printf("No se encontró el usuario en el archivo.\n\n");
+                return fallo;
+            }
+            
+            fseek(archivo, pos_usuario * sizeof(usuario_t), SEEK_SET);// Voy a la posicion donde guarde el usuario logeado
+            fread(&usuario, sizeof(usuario_t), 1, archivo); // leer para modificar
+
+            if (opcion == 1) {
+                strcpy(usuario.nombre, nombre_cambio);
+                strcpy(usuario_logeado->nombre, nombre_cambio);
+            } else {
+                strcpy(usuario.clave, clave_cambio);
+                strcpy(usuario_logeado->clave, clave_cambio);
             }
 
+            // Volver atrás y escribir el struct modificado
+            fseek(archivo, -sizeof(usuario_t), SEEK_CUR);
+            fwrite(&usuario, sizeof(usuario_t), 1, archivo);
             fclose(archivo);
-            printf("No se encontro el usuario en el archivo.\n\n");
-            return fallo;
+
+            printf("Dato actualizado correctamente.\n\n");
+            return funciono;
         } else {
-            printf("Clave incorrecta, Intento %d/3\n", intento + 1);
+            printf("\nClave incorrecta, Intento %d/3\n", intento + 1);
             intento++;
         }
     }
@@ -253,7 +280,7 @@ int CambiarTipoUsuario(){
     estado_t estado;
     tipo_usuario_t tipo_usuario;
     char nombre_ingresado[20];
-    int nuevo_estado=0, nuevo_tipo=0, estudiantes_existen=0;
+    int nuevo_estado=0, nuevo_tipo=0;
     FILE *archivo;
 
     printf("Ingrese el nombre de usuario\n");
@@ -262,15 +289,15 @@ int CambiarTipoUsuario(){
     printf("Ingrese el nuevo estado de usuario (1 = Activo, 2 = Inactivo, 3 = Expirado) : ");
     scanf("%d", &nuevo_estado);
     printf("\n\n");
-    if (nuevo_estado < 1 || nuevo_estado > 3) {
+    if (nuevo_estado < activo || nuevo_estado > expirado) {
         printf("Estado inválido\n");
         return fallo;
     }
     printf("Ingrese el nuevo tipo de usuario ");
-    printf("(1 = Administrador, 2 = Docente, 3 = No docente, 4 = Estudiante) : ");
+    printf("(1 = Administrador, 2 = Docente, 3 = No docente, 4 = Alumno) : ");
     scanf("%d", &nuevo_tipo);
     printf("\n\n");
-    if (nuevo_tipo < 1 || nuevo_tipo > 4) {
+    if (nuevo_tipo < administrador || nuevo_tipo > alumno) {
         printf("Tipo inválido\n");
         return fallo;
     }
