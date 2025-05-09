@@ -29,3 +29,12 @@ void createConnection(Node_t* First, Node_t* Second, int dist) {
 
     return;
 }
+void showgrap(Node_t* primerNodo){
+    for (int i = 0; i < 3; i++){
+        printf("%c - %d",primerNodo->connections[i].node->name,primerNodo->connections->dist);
+        return;
+
+    }  
+    return;
+
+}

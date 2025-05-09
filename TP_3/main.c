@@ -21,7 +21,7 @@ int main() {
     createConnection(E, F, 5);
 
     /* Begin USER functions */
-
+    showgrap(X);
     /* End USER functions */
     free(A);
     free(B);

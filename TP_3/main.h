@@ -13,3 +13,4 @@ struct Node {
 Node_t* createNode(char name);
 void createConnection(Node_t* First, Node_t* Second, int dist);
 void findPath(Node_t* Node, Node_t* Target, int currDist, int branch);
+void showgrap(Node_t* primerNodo);
