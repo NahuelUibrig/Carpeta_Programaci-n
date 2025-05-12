@@ -29,12 +29,31 @@ void createConnection(Node_t* First, Node_t* Second, int dist) {
 
     return;
 }
-void showgrap(Node_t* primerNodo){
-    for (int i = 0; i < 3; i++){
-        printf("%c - %d",primerNodo->connections[i].node->name,primerNodo->connections->dist);
+
+void showgraph(Node_t* primerNodo,Node_t* ultimoNodo,int pasos){
+    Node_t* actual=primerNodo;
+    if (actual == NULL || pasos > 10){
         return;
+    }
 
-    }  
-    return;
-
+    if (actual == ultimoNodo) {
+        printf("%c\n", actual->name);
+        
+        return;
+    }
+    
+    
+    pasos++;
+    for (int i = 0; i < 3; i++) {
+        if (actual->connections[i].node != NULL) {
+            printf("%c - %d -> ", actual->name, actual->connections[i].dist);
+            showgraph(actual->connections[i].node, ultimoNodo, pasos);
+        }
+    }
+    pasos--;
 }
+
+
+
+
+

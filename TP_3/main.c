@@ -3,6 +3,8 @@
 #include <stdlib.h>
 
 int main() {
+    int pasos=0;
+    int renglon=0;
     Node_t* X = createNode('X');
     Node_t* A = createNode('A');
     Node_t* B = createNode('B');
@@ -21,7 +23,7 @@ int main() {
     createConnection(E, F, 5);
 
     /* Begin USER functions */
-    showgrap(X);
+    showgraph(X,F,pasos);  
     /* End USER functions */
     free(A);
     free(B);
