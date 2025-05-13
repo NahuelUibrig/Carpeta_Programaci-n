@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "main.h"
 
 Node_t* createNode(char name) {
@@ -30,27 +31,37 @@ void createConnection(Node_t* First, Node_t* Second, int dist) {
     return;
 }
 
-void showgraph(Node_t* primerNodo,Node_t* ultimoNodo,int pasos){
+void showgraph(Node_t* primerNodo,int* pasos){
     Node_t* actual=primerNodo;
-    if (actual == NULL || pasos > 10){
+    int visitado=0;
+    char sangria[100]=" ";
+    if (actual == NULL || (*pasos)++ > 10){
         return;
     }
 
-    if (actual == ultimoNodo) {
-        printf("%c\n", actual->name);
-        
-        return;
+    
+    if (actual->connections[0].node == NULL&&
+        actual->connections[1].node == NULL&&
+        actual->connections[2].node == NULL) {
+            printf("%c\n", actual->name);
+     }
+    
+    for (int j = 0; j < *pasos; j++) { 
+    strcat(sangria,"         ");
     }
-    
-    
-    pasos++;
+
     for (int i = 0; i < 3; i++) {
         if (actual->connections[i].node != NULL) {
+            visitado++;
+            if(visitado>1){
+                printf("%s",sangria);
+            }
             printf("%c - %d -> ", actual->name, actual->connections[i].dist);
-            showgraph(actual->connections[i].node, ultimoNodo, pasos);
+            (*pasos)++;
+            showgraph(actual->connections[i].node, pasos);
         }
     }
-    pasos--;
+    (*pasos)--;
 }
 
 
