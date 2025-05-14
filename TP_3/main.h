@@ -14,3 +14,5 @@ Node_t* createNode(char name);
 void createConnection(Node_t* First, Node_t* Second, int dist);
 void findPath(Node_t* Node, Node_t* Target, int currDist, int branch);
 void showgraph(Node_t* primerNodo,int* pasos);
+void shortestPath(Node_t* primerNodo,Node_t* ultimoNodo,int* pasos,int* distancia,int* menorDistancia);
+

@@ -4,7 +4,7 @@
 #include <string.h>
 
 int main() {
-    int pasos=0;
+    int pasos=0,distancia=0,menorDistancia=100;
     Node_t* X = createNode('X');
     Node_t* A = createNode('A');
     Node_t* B = createNode('B');
@@ -34,6 +34,8 @@ int main() {
 
     /* Begin USER functions */
     showgraph(X,&pasos);  
+    printf("\n\n");
+    shortestPath(X,F,&pasos,&distancia,&menorDistancia);
     /* End USER functions */
     free(A);
     free(B);
