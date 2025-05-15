@@ -66,30 +66,40 @@ void showgraph(Node_t* primerNodo,int* pasos){
 
 void shortestPath(Node_t* primerNodo,Node_t* ultimoNodo,int* pasos,int *distancia,int *menorDistancia){
     Node_t* actual=primerNodo;
-    int visitado=0;
-    static int recursion = 0;  // Contador de llamadas activas
-    char sangria[100]="",sangria2[100]="";;
-    if (actual == NULL || *pasos > 10){
+    int visitado=0,fin=0;
+    char sangria[100]="",sangria2[100]="";
+    if (actual == NULL || *pasos > 20){
         return;
     }
 
-    for (int h = 1; h > (*pasos)-2; h--) { 
-    strcat(sangria2,"         ");
-    }
-    
-    if(actual==ultimoNodo){
-        printf("%c %s(Dist: %d)\n", actual->name,sangria2,*distancia); 
-        if(*distancia<*menorDistancia){
-            *menorDistancia=*distancia;
-        }    
-    }
-  
-    
     for (int j = 0; j < (*pasos)+1; j++) { 
     strcat(sangria,"         ");
     }
 
-    recursion++;  // Aumentar el contador antes de entrar en la recursión
+    for (int h = 0; h < 5-(*pasos); h++) { 
+    strcat(sangria2,"         ");
+    }
+
+    if (actual->connections[0].node == NULL&&
+        actual->connections[1].node == NULL&&
+        actual->connections[2].node == NULL&&
+        actual!=ultimoNodo) {
+            printf("%c\n", actual->name);
+    }
+    
+    
+
+    if(actual==ultimoNodo){
+        printf("%c %s(Dist: %d)\n", actual->name,sangria2,*distancia); 
+        if(*distancia<*menorDistancia){
+            *menorDistancia=*distancia;
+                
+        }
+        fin=1;
+        (*pasos)--; 
+        return;
+
+    }
 
     for (int i = 0; i < 3; i++) {
         if (actual->connections[i].node != NULL) {
@@ -98,7 +108,10 @@ void shortestPath(Node_t* primerNodo,Node_t* ultimoNodo,int* pasos,int *distanci
             if(visitado>1){
                 printf("%s",sangria);
             }
-            printf("%c - %d -> ", actual->name, actual->connections[i].dist);
+            if(fin==0){
+                    printf("%c - %d -> ", actual->name, actual->connections[i].dist);
+            }
+        
             (*pasos)++;
             shortestPath(actual->connections[i].node, ultimoNodo, pasos, distancia, menorDistancia);
             
@@ -106,17 +119,57 @@ void shortestPath(Node_t* primerNodo,Node_t* ultimoNodo,int* pasos,int *distanci
         }
     }
 
-    recursion--;  // Reducir el contador al regresar de la recursión
-
-    // **Imprimir la menor distancia solo cuando todas las llamadas han terminado**
-    if (recursion == 0) {
+    if (*pasos == 0) {
         printf("Menor distancia: %d\n", *menorDistancia);
     }
     (*pasos)--; 
     
 }
 
+/*void skipNode(Node_t* primerNodo,Node_t*nodoSkip){
+Node_t* actual=primerNodo;
+Node_t* first=NULL;
+Node_t* second=NULL;
+int dist=0;
 
+if (primerNodo == NULL || nodoSkip == NULL){
+    return;
+} 
+
+
+    for (Node_t* actual = primerNodo; actual != NULL;) { 
+        for (int i = 0; i < 3; i++) {
+            if (actual->connections[i].node == nodoSkip) {
+                first = actual;
+                dist = actual->connections[i].dist;
+                break;
+            }
+        }
+        if (first != NULL) break; // Salimos si ya encontramos la conexión
+    }
+
+    if (first == NULL) return; // No se encontró conexión con nodoSkip
+
+
+
+    
+
+for (int i = 0; i < 3; i++) {
+        if (nodoSkip->connections[i].node != NULL &&
+            nodoSkip->connections[i].node != first) {
+
+            second = nodoSkip->connections[i].node;
+            dist += nodoSkip->connections[i].dist;
+            break;
+        }
+
+        
+        }
+        if(second!=NULL){
+            createConnection(first, second, dist);
+    }
+}
+*/
 
 
 
