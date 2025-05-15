@@ -126,7 +126,7 @@ void shortestPath(Node_t* primerNodo,Node_t* ultimoNodo,int* pasos,int *distanci
     
 }
 
-/*void skipNode(Node_t* primerNodo,Node_t*nodoSkip){
+void skipNode(Node_t* primerNodo,Node_t*nodoSkip){
 Node_t* actual=primerNodo;
 Node_t* first=NULL;
 Node_t* second=NULL;
@@ -141,35 +141,19 @@ if (primerNodo == NULL || nodoSkip == NULL){
         for (int i = 0; i < 3; i++) {
             if (actual->connections[i].node == nodoSkip) {
                 first = actual;
-                dist = actual->connections[i].dist;
-                break;
+                second = actual->connections[i].node->connections[0].node;
+                dist = actual->connections[i].dist+actual->connections[i].node->connections[0].dist;
+                createConnection(first, second, dist);
+                free(nodoSkip);
+                return;
             }
+            skipNode(actual,nodoSkip);
         }
-        if (first != NULL) break; // Salimos si ya encontramos la conexión
-    }
-
-    if (first == NULL) return; // No se encontró conexión con nodoSkip
-
-
-
-    
-
-for (int i = 0; i < 3; i++) {
-        if (nodoSkip->connections[i].node != NULL &&
-            nodoSkip->connections[i].node != first) {
-
-            second = nodoSkip->connections[i].node;
-            dist += nodoSkip->connections[i].dist;
-            break;
-        }
-
         
-        }
-        if(second!=NULL){
-            createConnection(first, second, dist);
     }
+
 }
-*/
+
 
 
 

@@ -36,13 +36,14 @@ int main() {
     /* Begin USER functions */
     showgraph(X,&pasos);  
     printf("\n\n");
-    shortestPath(X,F,&pasos,&distancia,&menorDistancia);
+    shortestPath(X,C,&pasos,&distancia,&menorDistancia);
+    showgraph(X,&pasos);
     //skipNode(X,A);
     /* End USER functions */
     free(X);
     free(A);
     free(B);
-    free(C);
+    //free(C);
     free(D);
     free(E);
     free(F);
