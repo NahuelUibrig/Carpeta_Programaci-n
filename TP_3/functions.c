@@ -64,6 +64,8 @@ void showgraph(Node_t* primerNodo,int* pasos){
     (*pasos)--;
 }
 
+
+
 void shortestPath(Node_t* primerNodo,Node_t* ultimoNodo,int* pasos,int *distancia,int *menorDistancia){
     Node_t* actual=primerNodo;
     int visitado=0,fin=0;
@@ -119,40 +121,71 @@ void shortestPath(Node_t* primerNodo,Node_t* ultimoNodo,int* pasos,int *distanci
         }
     }
 
-    if (*pasos == 0) {
-        printf("Menor distancia: %d\n", *menorDistancia);
+    if (*pasos == -1) {
+        printf("\nMenor distancia: %d\n", *menorDistancia);
     }
     (*pasos)--; 
     
 }
 
-void skipNode(Node_t* primerNodo,Node_t*nodoSkip){
-Node_t* actual=primerNodo;
-Node_t* first=NULL;
-Node_t* second=NULL;
-int dist=0;
 
-if (primerNodo == NULL || nodoSkip == NULL){
+void skipNode(Node_t* primerNodo,Node_t*nodoSkip,Node_t*raiz){
+    Node_t* actual=primerNodo;
+    Node_t* first=NULL;
+    Node_t* second=NULL;
+    int dist=0,pasos=0;
+    static int noRecursiva=0;
+    if (actual == NULL || nodoSkip == NULL){
     return;
-} 
+    } 
+    
 
-
-    for (Node_t* actual = primerNodo; actual != NULL;) { 
-        for (int i = 0; i < 3; i++) {
-            if (actual->connections[i].node == nodoSkip) {
-                first = actual;
-                second = actual->connections[i].node->connections[0].node;
-                dist = actual->connections[i].dist+actual->connections[i].node->connections[0].dist;
-                createConnection(first, second, dist);
-                free(nodoSkip);
-                return;
-            }
-            skipNode(actual,nodoSkip);
+    // Paso 1: recorrer recursivamente primero, sin modificar
+    for (int i = 0; i < 3; i++) {
+        first = actual->connections[i].node;
+        if (first != NULL && first != nodoSkip) {
+            noRecursiva=0;
+            skipNode(first, nodoSkip,raiz);
         }
-        
     }
+    
+    // Paso 2: luego de recorrer, ver si alguna conexión apunta a nodoSkip
+    for (int i = 0; i < 3; i++) {
+        if (actual->connections[i].node == nodoSkip) {
+            second = actual->connections[i].node->connections[0].node;
+            if(second!=NULL){
+                dist = actual->connections[i].dist+actual->connections[i].node->connections[0].dist;
+                actual->connections[i].node = NULL;
+                actual->connections[i].dist = 0;
+                actual->connections[i].node = second;
+                actual->connections[i].dist = dist; 
+                if(noRecursiva==0){
+                pasos=0;
+                showgraph(raiz,&pasos);   
+                }
+                noRecursiva++;
+                if(nodoSkip->connections[1].node!=NULL){                      //Si algun nodo se queda sin conexion, se convierte en nodo origen.
+                    showgraph(nodoSkip->connections[1].node,&pasos);          //Se imprime nuevo camino de nodo origen.
+                }
+                if(nodoSkip->connections[2].node!=NULL){                      
+                    showgraph(nodoSkip->connections[2].node,&pasos);          
+                }
+                free(nodoSkip);
 
+            }else{
+                    printf("\n El nodo siguiente al destino no existe\n");
+            }
+                  
+        }
+    
+    }
+    
 }
+
+
+
+
+
 
 
 
