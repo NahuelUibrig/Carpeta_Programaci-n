@@ -34,7 +34,7 @@ int main() {
 
     printf("\n-------------------------------------------------------------------------------------------------\n");
 
-    printf("\n-Distancias entre Nodos: \n\n");
+    printf("\n-Distancias entre Nodos X y F: \n\n");
 
     shortestPath(X,F,&pasos,&distancia,&menorDistancia);
 
