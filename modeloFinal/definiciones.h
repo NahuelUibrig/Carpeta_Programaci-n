@@ -24,5 +24,5 @@ struct Node {
 /* ============ Prototipos Catedra (NO USAR) ============ */
 void CATEDRA_CrearListaDoble(Node** primerNodo, Node** ultimoNodo);
 void sumarMultiplo();
-int buscoNumero();
+void buscoNumero();
 #endif
