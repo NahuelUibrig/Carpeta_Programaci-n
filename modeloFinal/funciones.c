@@ -43,75 +43,14 @@ void sumarMultiplo(){
     free(lista);
     
 }
-/*
-void buscoNumero(){
-    FILE* file;
-    int i = 0,j=0,sumaAnterior=0,numero=0,promedio=0,corrido=0,nuevoNumero=0;
-    
-
-    file = fopen("lista.bin", "rb+");
-    if (file == NULL) {
-        perror("Error al abrir el archivo");
-        return;
-    }
-
-    int* lista = malloc(sizeof(int));
-    if (lista == NULL) {
-        perror("Error de asignación de memoria");
-        return;
-    }
-
-    while (fread(&lista[i], sizeof(int), 1, file)) {
-        i++;
-        lista = realloc(lista, (i + 1) * sizeof(int));
-       
-    }
-
-    ////////////////////////////////////////////////////
-    for(j=0;j<i-1;j++){
-            sumaAnterior+=lista[j];
-            if(j>9&& sumaAnterior%j==0){
-                promedio=sumaAnterior/j;
-            }
-            
-            if(promedio!=0){
-                corrido=lista[j]>1;
-                if(corrido*0xb00010000>0){
-                    nuevoNumero=lista[j]+corrido*0xb00001000;
-                    printf("\nNumero anterior: %d \n", lista[j]);
-                    printf("\nNuevo numero: %d \n", nuevoNumero);
-                    return;
-                }
-                else {
-                    nuevoNumero=lista[j]-corrido*0xb00001000;
-                    printf("\nNumero anterior: %d \n", lista[j]);
-                    printf("\nNuevo numero: %d \n", nuevoNumero);
-                    return;
-                }
-                
-
-            }
-
-    }
-    //////////////////////////////////////////////////// 
-    
-   
-    fclose(file);
-    free(lista);
-    
-}*/
 
 
 
-
-void imprimirBinario(int num) {
-    for (int i = 7; i >= 0; i--) {
-        printf("%d", (num >> i) & 1);
-        if (i % 8 == 0) printf(" ");  // Separar por byte para mejor lectura
-    }
-}
 
 void buscoNumero() {
+    int i = 0, encontrado = 0, suma = 0, promedio = 0, 
+    numeroOriginal = 0, numeroModificado = 0, repeticiones = 0;
+    
     FILE* file = fopen("lista.bin", "rb");
     if (file == NULL) {
         perror("Error al abrir el archivo");
@@ -126,7 +65,7 @@ void buscoNumero() {
         return;
     }
 
-    int i = 0;
+    
     while (fread(&lista[i], sizeof(int), 1, file) == 1) {
         i++;
         int* temp = realloc(lista, (i + 1) * sizeof(int));
@@ -139,12 +78,6 @@ void buscoNumero() {
         lista = temp;
     }
     fclose(file);
-
-    int encontrado = 0;
-    int suma = 0;
-    int promedio = 0;
-    int numeroOriginal = 0;
-    int numeroModificado = 0;
 
     // Buscar el primer número que cumpla la condición
     for (int j = 10; j < i; j++) {
@@ -159,7 +92,9 @@ void buscoNumero() {
 
             // Mostrar número original
             printf("Número original: %d\nBinario: ", numeroOriginal);
-            imprimirBinario(numeroOriginal);
+            for (int i = 7; i >= 0; i--) {
+                printf("%d", (numeroOriginal >> i) & 1);
+            }     
             printf("\n");
 
             // Modificar el 4to bit para que sea igual al 5to
@@ -172,11 +107,14 @@ void buscoNumero() {
 
             // Mostrar número modificado
             printf("Número modificado: %d\nBinario: ", numeroModificado);
-            imprimirBinario(numeroModificado);
+            for (int i = 7; i >= 0; i--) {
+                printf("%d", (numeroModificado >> i) & 1);
+            }       
+    
             printf("\n");
 
             // Contar repeticiones del número original en la lista
-            int repeticiones = 0;
+            
             for (int m = 0; m < i; m++) {
                 if (lista[m] == numeroOriginal)
                     repeticiones++;
@@ -194,3 +132,163 @@ void buscoNumero() {
 
     free(lista);
 }
+
+
+void imprimoLista(Node*primerNodo,Node *ultimoNodo){
+Node* actual=primerNodo;
+int i=0,temperatura=0,humedad=0;
+if (actual == NULL){
+        return;
+    }
+printf("\nLista en orden normal\n");
+while (1) {
+        i++;
+        temperatura=actual->data.temp;
+        humedad=actual->data.humedad;
+        printf("\nNodo: %d\nTemperatura:%d\nHumedad:%d\n",i,temperatura,humedad);
+        if(actual!=ultimoNodo){    
+        actual = actual->next;
+        }
+        else break;
+        
+    }
+printf("\nLista en orden inverso\n");
+while (1) {
+        temperatura=actual->data.temp;
+        humedad=actual->data.humedad;
+        printf("\nNodo: %d\nTemperatura:%d\nHumedad:%d\n",i,temperatura,humedad);
+        i--;
+        if(actual!=primerNodo){
+        actual = actual->prev;
+        }
+        else break;
+        
+    }
+}
+
+
+
+
+
+
+
+void eliminarHumedad(Node **primerNodo, Node **ultimoNodo){
+    Node* actual=*primerNodo;
+    Node* siguiente;
+    if (actual == NULL){
+        return;
+    }
+    
+    while (actual!=NULL) {
+        siguiente = actual->next; 
+        if(actual->data.humedad<0){
+            if (actual->prev!= NULL){ 
+                    actual->prev->next=actual->next;
+                    
+            }else{                //Es el primero
+                    *primerNodo=actual->next;   
+                 }
+            
+            if (actual->next!= NULL){ 
+                    actual->next->prev=actual->prev;
+            }else{                //Es el ultimo
+                    *ultimoNodo=actual->prev;   
+                 }
+            free(actual);    
+            }
+            actual = siguiente;    
+        }
+}
+
+void imprimoListaCondicionada(Node*primerNodo,Node *ultimoNodo){
+Node* actual=primerNodo;
+int i=0,temperatura=0,humedad=0;
+if (actual == NULL){
+        return;
+    }
+printf("\nLista condicionada:\n");
+while (1) {
+        i++;
+        temperatura=actual->data.temp;
+        humedad=actual->data.humedad;
+        if(humedad>80&&temperatura<2){
+            printf("\nNodo: %d\nTemperatura:%d\nHumedad:%d\n",i,temperatura,humedad);
+        }
+        if(actual!=ultimoNodo){    
+        actual = actual->next;
+        }
+        else break;
+        
+    }
+}
+
+
+
+
+void crearListaSimple(Node*primerNodo,Node *ultimoNodo){
+    Node* actual=primerNodo;
+    int* temp;
+    int* lista=NULL;
+    int i=0,temperatura=0;
+    if (actual == NULL){
+        return;
+    }
+    printf("\nLista en orden normal\n");
+    while (1) {
+        
+        temp = realloc(lista, (i + 1) * sizeof(int));
+        if (temp == NULL) {
+            perror("Error de realloc");
+            free(lista);
+            return;
+        }
+        lista = temp;
+        lista[i]=actual->data.temp;
+        i++;
+        if(actual!=ultimoNodo){    
+        actual = actual->next;
+        }
+        else break;
+        
+    }
+    BubbleSort(lista,i);
+    mostrarLista(lista,i);
+    freeList(primerNodo);
+}
+
+void Intercambio(int* x, int* y) {
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+void BubbleSort(int* lista, int temp) {
+    for (int j = 0; j < temp - 1; j++) {
+        for (int i = 0; i < temp - j - 1; i++) {
+            if (lista[i] > lista[i + 1]) {
+                Intercambio(&lista[i], &lista[i + 1]);
+            }
+        }
+    }
+}
+void mostrarLista(int* lista, int longitud) {
+    for (int i = 0; i < longitud; i++) {
+        printf("%d  ", lista[i]);
+    }
+    printf("\n");
+}
+
+void freeList(Node *primerNodo)
+{
+    Node *current = primerNodo;
+    Node *nextDoubleNode;
+    while (current != NULL)
+    {
+        nextDoubleNode = current->next;
+        free(current);
+        current = nextDoubleNode;
+    }
+}
+
+    
+   

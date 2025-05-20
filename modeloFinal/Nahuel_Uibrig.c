@@ -20,7 +20,6 @@ int main() {
     /* Comienzo de su codigo */
     sumarMultiplo();
     buscoNumero();
-    
     /* Fin de su codigo */
 #endif
 
@@ -30,6 +29,16 @@ int main() {
     CATEDRA_CrearListaDoble(&primerNodo, &ultimoNodo);
 
     /* Comienzo de su codigo */
+    printf("\nLista antes del cambio\n");
+    imprimoLista(primerNodo, ultimoNodo);
+    eliminarHumedad(&primerNodo,&ultimoNodo);
+    printf("\nLista despues del cambio\n");
+    imprimoLista(primerNodo, ultimoNodo);
+    imprimoListaCondicionada(primerNodo, ultimoNodo);
+    printf("\nLista nueva\n");
+    crearListaSimple(primerNodo,ultimoNodo);
+    
+
     /* Fin de su codigo */
 #endif
 

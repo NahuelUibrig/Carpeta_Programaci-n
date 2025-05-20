@@ -25,4 +25,12 @@ struct Node {
 void CATEDRA_CrearListaDoble(Node** primerNodo, Node** ultimoNodo);
 void sumarMultiplo();
 void buscoNumero();
+void imprimoLista(Node*primerNodo,Node *ultimoNodo);
+void eliminarHumedad(Node **primerNodo, Node **ultimoNodo);
+void imprimoListaCondicionada(Node*primerNodo,Node *ultimoNodo);
+void crearListaSimple(Node*primerNodo,Node *ultimoNodo);
+void BubbleSort(int* lista, int temp);
+void Intercambio(int* x, int* y);
+void mostrarLista(int* lista, int longitud);
+void freeList(Node *primerNodo);
 #endif
