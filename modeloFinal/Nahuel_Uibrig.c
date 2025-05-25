@@ -26,6 +26,7 @@ int main() {
 #ifdef EJ2
     Node* primerNodo;
     Node* ultimoNodo;
+    Nodo* primerNodoSimple = NULL;
     CATEDRA_CrearListaDoble(&primerNodo, &ultimoNodo);
 
     /* Comienzo de su codigo */
@@ -35,9 +36,9 @@ int main() {
     printf("\nLista despues del cambio\n");
     imprimoLista(primerNodo, ultimoNodo);
     imprimoListaCondicionada(primerNodo, ultimoNodo);
-    printf("\nLista nueva\n");
-    crearListaSimple(primerNodo,ultimoNodo);
-    
+    printf("\nLista en orden normal\n");
+    crearListaSimple(primerNodo,ultimoNodo,&primerNodoSimple);
+    freeListdoble(&primerNodo, &ultimoNodo);
 
     /* Fin de su codigo */
 #endif

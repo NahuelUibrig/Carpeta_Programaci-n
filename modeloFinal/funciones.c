@@ -225,15 +225,15 @@ while (1) {
 
 
 
-void crearListaSimple(Node*primerNodo,Node *ultimoNodo){
+void crearListaSimple(Node*primerNodo,Node *ultimoNodo,Nodo **primerNodoSimple){
     Node* actual=primerNodo;
+    Nodo* ultimo=NULL;
     int* temp;
     int* lista=NULL;
-    int i=0,temperatura=0;
+    int i=0;
     if (actual == NULL){
         return;
     }
-    printf("\nLista en orden normal\n");
     while (1) {
         
         temp = realloc(lista, (i + 1) * sizeof(int));
@@ -252,16 +252,33 @@ void crearListaSimple(Node*primerNodo,Node *ultimoNodo){
         
     }
     BubbleSort(lista,i);
-    mostrarLista(lista,i);
-    freeList(primerNodo);
-}
 
+    for (int j = 0; j < i; j++) {
+        Nodo* nuevo = malloc(sizeof(Nodo));
+        if (nuevo == NULL) {
+            perror("malloc");
+            return;
+        }
+        nuevo->temperatura = lista[j];
+        nuevo->next = NULL;
+
+        if (*primerNodoSimple == NULL) {
+            *primerNodoSimple = nuevo;
+        } else {
+            ultimo->next = nuevo;
+        }
+        ultimo = nuevo;
+    }
+    
+    mostrarLista(lista,i);
+    free(lista);
+
+}
 void Intercambio(int* x, int* y) {
     int temp = *x;
     *x = *y;
     *y = temp;
 }
-
 void BubbleSort(int* lista, int temp) {
     for (int j = 0; j < temp - 1; j++) {
         for (int i = 0; i < temp - j - 1; i++) {
@@ -277,17 +294,18 @@ void mostrarLista(int* lista, int longitud) {
     }
     printf("\n");
 }
+void freeListdoble(Node** primerNodo, Node** ultimoNodo){
+    Node* actual = *primerNodo;
+    Node* siguiente;
 
-void freeList(Node *primerNodo)
-{
-    Node *current = primerNodo;
-    Node *nextDoubleNode;
-    while (current != NULL)
-    {
-        nextDoubleNode = current->next;
-        free(current);
-        current = nextDoubleNode;
+    while (actual != NULL) {
+        siguiente = actual->next;
+        free(actual);
+        actual = siguiente;
     }
+
+    *primerNodo = NULL;
+    *ultimoNodo = NULL;
 }
 
     
