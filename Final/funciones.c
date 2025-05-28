@@ -23,6 +23,7 @@ void numeroRepetido(int* lista,int cantidad){
         }
     }
     */
+   ///////////////imprimo lista funcional///////////////////
     for(i = 0; i < cantidad; i++) {
         actual = lista[i];
         vecesActual = 0;
@@ -81,8 +82,8 @@ void imprimirNumerosMenores(int* lista,int cantidad){
     printf("\n");
    
 }
-
-
+/////////version 1/////////////////
+/*
 void imprimirGrilla(qnode_t* first,int* largo, int* alto){
     qnode_t* actual=first;
     qnode_t* siguiente=NULL;
@@ -107,6 +108,37 @@ void imprimirGrilla(qnode_t* first,int* largo, int* alto){
     imprimirGrilla(siguiente,largo,alto);
 
 }
+*/
+/////////version 2/////////////////
+void imprimirGrilla(qnode_t* first,int* largo, int* alto){
+    qnode_t* actual=first;
+    qnode_t* actual2=actual;
+    
+    int columnas=0;
+
+    if (actual == NULL){
+            return;
+        }
+    
+    while(actual2!=NULL){
+    columnas=0;
+        while (actual2!=NULL) {
+        printf("%d ",actual2->valor);
+        actual2 = actual2->right;
+        columnas++;
+        }
+    if(columnas>*largo){
+        *largo=columnas;
+    }
+
+    actual=actual->down;
+    actual2=actual;
+    (*alto)++;
+    printf("\n");
+    }
+    
+}
+
 
 void modificarGrilla(qnode_t *first){
     qnode_t* actual=first;
