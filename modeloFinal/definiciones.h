@@ -1,45 +1,36 @@
 #ifndef definiciones
 #define definiciones
 
+/* Declaracion de autoria
+ * Fecha : 09/11/24
+ * Autor : 
+ */
+
+typedef struct dNode{
+    int data;
+    struct dNode *next;
+    struct dNode *prev;
+}dNode;
+
+
+/* Puede comentar o des-comentar los siguientes define a medida que lo necesite*/
 #define EJ1
 #define EJ2
-
-typedef struct {
-    int temp;
-    int humedad;
-} data_t;
-
-typedef struct Node Node;
-
-struct Node {
-    Node* next;
-    Node* prev;
-    data_t data;
-};
-
-/* ============= Comienzo de sus prototipos ============= */
-
-typedef struct Nodo Nodo;
-
-struct Nodo {
-    Nodo* next;
-    int temperatura;
-};
-void sumarMultiplo();
-void buscoNumero();
-void imprimoLista(Node*primerNodo,Node *ultimoNodo);
-void eliminarHumedad(Node **primerNodo, Node **ultimoNodo);
-void imprimoListaCondicionada(Node*primerNodo,Node *ultimoNodo);
-void crearListaSimple(Node*primerNodo,Node *ultimoNodo,Nodo **primerNodoSimple);
-void BubbleSort(int* lista, int temp);
-void Intercambio(int* x, int* y);
-void mostrarLista(int* lista, int longitud);
-void freeListdoble(Node** primerNodo, Node** ultimoNodo);
+#define EJ3
 
 
-/* ===============  Fin de sus prototipos =============== */
+int lista_corta[] = {5, 10, 7, 20, 19, 15, 11, 2, 6, 0}; 
 
-/* ============ Prototipos Catedra (NO USAR) ============ */
-void CATEDRA_CrearListaDoble(Node** primerNodo, Node** ultimoNodo);
+/* Comienzo de sus prototipos */
+void imprimoLista(int* lista,int cantidad);
+void imprimoListaModificada(int* lista,int cantidad);
+void imprimoNumero(int* lista,int cantidad);
+void imprimoCiclo(dNode* primerNodo);
+void crearListaCircular(dNode*primerNodo,dNode*ultimoNodo);
+void verificarCircularidad(dNode* primerNodo);
+/* Fin de sus prototipos */
+dNode * CATEDRA_create_dNode(int data);
+dNode* CATEDRA_insDFirst(dNode* primer_dNode, int new_data);
+void CATEDRA_CrearListaDoble(dNode **primerNodo, dNode **ultimoNodo);
 
 #endif
