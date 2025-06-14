@@ -20,20 +20,31 @@ typedef struct dNode {
 } dNode;
 
 /* Puede comentar o des-comentar los siguientes define a medida que lo necesite*/
-#define EJ1
-#define EJ2
+/*#define EJ1
+#define EJ2*/
 #define EJ3
 
 
 
 /* ============= Comienzo de sus prototipos ============= */
 FILE* file;
-    int i = 0;
-    int* lista=0;
-    int* temp=0;
+int i = 0;
+int* lista=0;
+int* temp=0;
 void imprimirLista(int* lista, int i);
 void sumarMultiplos(int* lista, int i);
 void cambiarLista(int* lista, int i);
+////////////////////////////////////////////////////////////
+void buscarNodoRoto(dNode**primerDnode,dNode**ultimoDNode);
+////////////////////////////////////////////////////////////
+int largo=0;
+void imprimeListaSimple(Node *primerNode);
+Node *crearNodo(int nuevoDato);
+Node *creaListaSimple(int lista_gap[], int largo);
+void fusionarListasOrdenando(Node** primerNode,Node* primerNodePropio);
+void intercambioData(Node* a, Node* b);
+void bubbleSortLista(Node* head);
+
 /* ===============  Fin de sus prototipos =============== */
 
 

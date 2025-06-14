@@ -13,6 +13,8 @@
 #include "definiciones.h"
 #include "funciones.c"
 #include "Catedra_3.c"
+#include <stdio.h>
+#include <stdlib.h>
 
 int main() {
 #ifdef EJ1
@@ -65,13 +67,21 @@ int main() {
     CATEDRA_CrearListaDoble(&primerDNode, &ultimoDNode);
 
     /* Comienzo de su codigo */
-
+   
+    buscarNodoRoto(&primerDNode,&ultimoDNode);
     /* Fin de su codigo */
 #endif
 
 #ifdef EJ3
     printf("\n\n========== Ejercicio 3 ==========\n\n");
     Node *primerNode = CATEDRA_CrearListaSimple();
+    imprimeListaSimple(primerNode);
+    largo = sizeof(lista_gap) / sizeof(lista_gap[0]);  //mide la cantidad de enteros en un vector
+    Node *primerNodePropio= creaListaSimple(lista_gap,largo);
+    imprimeListaSimple(primerNodePropio);
+    fusionarListasOrdenando(&primerNode,primerNodePropio);
+    imprimeListaSimple(primerNode);
+
     /* Comienzo de su codigo */
 
 
