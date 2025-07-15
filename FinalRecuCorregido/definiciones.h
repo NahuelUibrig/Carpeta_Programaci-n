@@ -24,13 +24,15 @@ typedef struct {
 } superNode_t;
 
 /* ============= Comienzo de sus prototipos ============= */
-unsigned int* lista[]={0};
+unsigned int* lista = NULL;
 unsigned int longitud=0;
 int largo=0;
 unsigned int leer_archivo(unsigned int** lista);
 void imprimirLista(unsigned int* lista, unsigned int longitud);
 //////////////////////////////
 void modificarLista(unsigned int* lista,unsigned int longitud);
+void EliminoUltimo(unsigned int**lista,unsigned int* longitud);
+void EliminoPrimero(unsigned int**lista,unsigned int* longitud);
 ///////////////////////////////////////////////
 void encuentroLista(superNode_t* first);
 int listasNoCirculares(superNode_t* first);

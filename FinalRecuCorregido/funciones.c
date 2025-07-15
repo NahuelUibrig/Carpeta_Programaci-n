@@ -43,7 +43,7 @@ unsigned int leer_archivo(unsigned int** lista){   //lee un archivo dado, lo vue
         perror ("\nError al cerrar archivo");
         return 0;
       }       
-    return i;                                               // Retorna el Length de la lista dinamica
+    return i;                                               // Retorna el largo de la lista dinamica
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -67,6 +67,46 @@ void modificarLista(unsigned int* lista,unsigned int longitud){
     printf("\n\n");
 
 }
+void EliminoUltimo(unsigned int** lista, unsigned int* longitud) {
+    unsigned int* temp=NULL;
+
+    if (*longitud == 0){
+        return;
+    }
+    (*longitud)--;
+    temp = realloc(*lista, (*longitud) * sizeof(unsigned int));
+    
+    if (temp == NULL) {
+        perror("Error en realloc");
+        (*longitud)++;
+        return;
+    }
+
+    *lista = temp;
+}
+
+void EliminoPrimero(unsigned int** lista, unsigned int* longitud) {
+    unsigned int* temp=NULL;
+
+    if (*longitud == 0){
+        return;
+    }
+    // Mover todos los elementos una posición a la izquierda
+    for (unsigned int i = 1; i < *longitud; i++) {
+        (*lista)[i - 1] = (*lista)[i];
+    }
+    
+    (*longitud)--;
+    temp = realloc(*lista, (*longitud) * sizeof(unsigned int));
+    
+    if (temp == NULL) {
+        perror("Error en realloc");
+        (*longitud)++;
+        return;
+    }
+
+    *lista = temp;
+}
 
 /////////////////////////////////////////////////////////////////////////
 void imprimirLista(unsigned int* lista, unsigned int longitud){
@@ -75,7 +115,7 @@ void imprimirLista(unsigned int* lista, unsigned int longitud){
         printf("%d - ",lista[i]);
     }
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void encuentroLista(superNode_t* first){
 superNode_t* nodoMaestro=first;
 node_t* lista1=nodoMaestro->nodoLista1;

@@ -11,19 +11,25 @@ int main(void)
 #ifdef EJ1
     printf("\n ==== EJERCICIO 1 ==== \n");
    
-    longitud=leer_archivo(lista);
+    longitud=leer_archivo(&lista);
     printf("%d ",longitud);
     printf("\n\n");
     printf("Lista original = \n\n");
-    imprimirLista(*lista,longitud);
+    imprimirLista(lista,longitud);
     printf("\n\n");
     printf("Numeros repetidos mas de 2 veces\n\n");
-    modificarLista(*lista,longitud);
+    modificarLista(lista,longitud);
     printf("Lista modificada = \n\n");
-    imprimirLista(*lista,longitud);
-    EliminoUltimo(*lista,longitud);
-    
-    
+    imprimirLista(lista,longitud);
+    printf("\n\n");
+    EliminoUltimo(&lista,&longitud);
+    printf("Lista modificada menos ultimo valor = \n\n");
+    imprimirLista(lista,longitud);
+    printf("\n\n");
+    EliminoPrimero(&lista,&longitud);
+    printf("Lista modificada menos primer valor = \n\n");
+    imprimirLista(lista,longitud);
+    printf("\n\n");
 
 #endif
 
