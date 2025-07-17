@@ -40,7 +40,33 @@ int main(void)
     encuentroLista(first);
     largo=listasNoCirculares(first);
     encuentroLista(first);  ///Comprobacion
-    //ordenarYliberar(first);
+    ordenarLiberar(first);
+    printf("Comprobacion de listas:\n\n");
+    printf("\nLista 1:\n\n");
+    if (first->nodoLista1 == NULL){
+    printf("Vacia.\n");
+    }
+    else{
+        imprimeListaSimple(first->nodoLista1);  // solo si no es NULL
+    }
+    printf("\nLista 2:\n\n");
+    if (first->nodoLista2 == NULL){
+    printf("Vacia.\n");
+    }
+    else{
+        imprimeListaSimple(first->nodoLista2);  // solo si no es NULL
+    }
+    printf("\nLista 3:\n\n");
+    if (first->nodoLista3 == NULL){
+    printf("Vacia.\n");
+    }
+    else{
+        imprimeListaSimple(first->nodoLista3);  // solo si no es NULL
+    }
+    printf("\n");
+    borrarListaSimple(&first->nodoLista2);
+    borrarListaSimple(&first->nodoLista3);
+    
 #endif
 
     return 0;

@@ -1,5 +1,6 @@
 #ifndef definiciones
 #define definiciones
+#include <stdlib.h>
 
 #define EJ1
 #define EJ2
@@ -35,8 +36,14 @@ void EliminoUltimo(unsigned int**lista,unsigned int* longitud);
 void EliminoPrimero(unsigned int**lista,unsigned int* longitud);
 ///////////////////////////////////////////////
 void encuentroLista(superNode_t* first);
+int es_puramente_circular(node_t* first);
 int listasNoCirculares(superNode_t* first);
-//void ordenarYliberar(superNode_t* first);
+void ordenarLiberar(superNode_t* first);
+void intercambioData(node_t* a, node_t* b);
+void bubbleSortLista(node_t* primero);
+void bubbleSortListaInverso(node_t* primero);
+void imprimeListaSimple(node_t *primerNodo);
+void borrarListaSimple(node_t** PrimerNodo);
 /* ===============  Fin de sus prototipos =============== */
 
 #endif
