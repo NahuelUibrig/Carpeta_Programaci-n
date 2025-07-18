@@ -309,7 +309,10 @@ int es_puramente_circular(node_t* first) {
 
 
 void encuentroLista(superNode_t* first) {
-    if (first == NULL) return;
+    if (first == NULL){
+        printf("Error: El supernodo es nulo.\n");
+        return;
+    }
 
     printf("\n--- Analizando circularidad de listas ---\n");
     if (es_puramente_circular(first->nodoLista1)==1) {
@@ -333,82 +336,159 @@ void encuentroLista(superNode_t* first) {
 }
 
 
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////Caso donde tenemos listas circulares puras////////////////////////////////////
 
 int listasNoCirculares(superNode_t* first){
+if (first == NULL){
+    printf("Error: El supernodo es nulo.\n");
+    return -1;
+}
 superNode_t* nodoMaestro=first;
 node_t* lista1=nodoMaestro->nodoLista1;
 node_t* lista2=nodoMaestro->nodoLista2;
 node_t* lista3=nodoMaestro->nodoLista3;
-int items1=1,items2=1,items3=1;
-lista1=lista1->next;
-lista2=lista2->next;
-lista3=lista3->next;
-printf("\n");
-while (1) {
-    if(lista1==NULL){
-        break;
-    }
-    if(lista1->next==nodoMaestro->nodoLista1){
-        lista1->next=NULL;
-    }
-    if(lista1!=nodoMaestro->nodoLista1){
-    lista1 = lista1->next;
-    items1++;
+int items1=0,items2=0,items3=0,maxItems=0;
+if (lista1 != NULL) { // Verifico que la lista no este vacia.
+    items1 = 1; 
+    node_t* actual = lista1; // Uso un puntero para no perder la cabeza.
     
-    }else{
-        break; 
-    }
-    
-}
-while (1) {
-    if(lista2==NULL){
-        break;
-    }
-    if(lista2->next==nodoMaestro->nodoLista2){
-        lista2->next=NULL;
-    }
-    if(lista2!=nodoMaestro->nodoLista2){
-    lista2 = lista2->next;
-    items2++;
-    
-    }else{
-       break; 
-    }
-    
-    
-}
-while (1) {
-    if(lista3==NULL){
+    while (1) {
         
-        break;
-    }
-    if(lista3->next==nodoMaestro->nodoLista3){
-        lista3->next=NULL;
-    }
-    if(lista3!=nodoMaestro->nodoLista3){
-    lista3 = lista3->next;
-    items3++;
-    
-    }else{
-       break; 
-    }
-    
-    
+        if (actual->next == nodoMaestro->nodoLista1) {// Si encuentro ciclo lo rompo
+            actual->next = NULL;
+        }
+        actual = actual->next;
+
+        if (actual == NULL) {// Si llego al final salgo del bucle
+            break;
+        }
+        items1++;
+    }      
 }
+if (lista2 != NULL) { // Verifico que la lista no este vacia.
+    items2 = 1; 
+    node_t* actual = lista2; // Uso un puntero para no perder la cabeza.
+    
+    while (1) {
+        
+        if (actual->next == nodoMaestro->nodoLista2) {// Si encuentro ciclo lo rompo
+            actual->next = NULL;
+        }
+        actual = actual->next;
+
+        if (actual == NULL) {// Si llego al final salgo del bucle
+            break;
+        }
+        items2++;
+    }      
+}
+if (lista3 != NULL) { // Verifico que la lista no este vacia.
+    items3 = 1; 
+    node_t* actual = lista3; // Uso un puntero para no perder la cabeza.
+    
+    while (1) {
+        
+        if (actual->next == nodoMaestro->nodoLista3) {// Si encuentro ciclo lo rompo
+            actual->next = NULL;
+        }
+        actual = actual->next;
+
+        if (actual == NULL) {// Si llego al final salgo del bucle
+            break;
+        }
+        items3++;
+    }      
+}
+    
 printf("Listas circulares desarmadas\n\n");
-if(items1>items2&&items1>items3){
-printf("La lista 1 es mas larga, tiene %d items\n\n",items1);
-}
-if(items2>items1&&items2>items3){
-printf("La lista 2 es mas larga, tiene %d items\n\n",items2);
-}
-if(items3>items1&&items3>items2){
-printf("La lista 3 es mas larga, tiene %d items\n\n",items3);
+maxItems = items1;
+if (items2 > maxItems){
+    maxItems = items2;
+} 
+if (items3 > maxItems){
+    maxItems = items3;
+} 
+
+printf("La(s) lista(s) más larga(s) tiene(n) %d items:\n", maxItems);
+if (items1 == maxItems) printf(" -> Lista 1\n");
+if (items2 == maxItems) printf(" -> Lista 2\n");
+if (items3 == maxItems) printf(" -> Lista 3\n");
+
+return 0;
 }
 
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////Caso donde contemplamos listas con ciclos en el medio////////////////////////////////////////////
+/*
+int listasNoCirculares(superNode_t* first) {
+    if (first == NULL) {
+        printf("Error: El supernodo es nulo.\n");
+        return -1; // Indicamos un error
+    }
+    
+    printf("\n--- Desarmando listas y contando elementos ---\n");
+
+    // Usamos la nueva función auxiliar para cada lista
+    int items1 = desarmar_y_contar_lista(first->nodoLista1);
+    printf("Lista 1 procesada. Total de elementos: %d\n", items1);
+
+    int items2 = desarmar_y_contar_lista(first->nodoLista2);
+    printf("Lista 2 procesada. Total de elementos: %d\n", items2);
+
+    int items3 = desarmar_y_contar_lista(first->nodoLista3);
+    printf("Lista 3 procesada. Total de elementos: %d\n", items3);
+
+    printf("\n--- Comparando longitudes ---\n");
+
+    // Lógica de comparación corregida para encontrar la más larga (maneja empates)
+    if (items1 >= items2 && items1 >= items3) {
+        printf("La lista 1 es la mas larga (o una de las mas largas) con %d items.\n\n", items1);
+    } else if (items2 >= items1 && items2 >= items3) {
+        printf("La lista 2 es la mas larga (o una de las mas largas) con %d items.\n\n", items2);
+    } else {
+        printf("La lista 3 es la mas larga (o una de las mas largas) con %d items.\n\n", items3);
+    }
+    
+    return 0; // Éxito
 }
+
+
+int desarmar_y_contar_lista(node_t* head) {
+    // Si la lista está vacía, no hay nada que hacer.
+    if (head == NULL) {
+        return 0;
+    }
+
+    // Usamos tu función para verificar si es un círculo perfecto.
+    if (es_puramente_circular(head)) {
+        // Si es circular, la desarmamos.
+        // Para ello, necesitamos encontrar el último nodo (el que apunta a 'head').
+        node_t* actual = head;
+        while (actual->next != head) {
+            actual = actual->next;
+        }
+        // Rompemos el ciclo. Ahora es una lista lineal.
+        actual->next = NULL;
+    }
+    // Si la lista no es puramente circular (es lineal o tiene un ciclo que no incluye al inicio),
+    // no la modificamos para evitar errores. La contaremos como una lista lineal.
+
+    // Ahora contamos los elementos de la lista (que ya es garantizado lineal).
+    int contador = 0;
+    node_t* actual = head;
+    while (actual != NULL) {
+        contador++;
+        actual = actual->next;
+    }
+
+    return contador;
+}
+*/
+
+
 void ordenarLiberar(superNode_t* first){
 superNode_t* nodoMaestro=first;
 node_t* lista1=nodoMaestro->nodoLista1;

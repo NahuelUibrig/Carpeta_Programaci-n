@@ -38,6 +38,7 @@ void EliminoPrimero(unsigned int**lista,unsigned int* longitud);
 void encuentroLista(superNode_t* first);
 int es_puramente_circular(node_t* first);
 int listasNoCirculares(superNode_t* first);
+int desarmar_y_contar_lista(node_t* head);
 void ordenarLiberar(superNode_t* first);
 void intercambioData(node_t* a, node_t* b);
 void bubbleSortLista(node_t* primero);
