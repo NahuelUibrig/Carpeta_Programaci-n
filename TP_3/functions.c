@@ -94,7 +94,7 @@ void shortestPath(Node_t* primerNodo,Node_t* ultimoNodo,int* pasos,int *distanci
     if(actual==ultimoNodo){
         printf("%c %s(Dist: %d)\n", actual->name,sangria2,*distancia); 
         if(*distancia<*menorDistancia){
-            *menorDistancia=*distancia;
+            *menorDistancia=*distancia;     //guardo menor distancia.
                 
         }
         fin=1;
@@ -106,7 +106,7 @@ void shortestPath(Node_t* primerNodo,Node_t* ultimoNodo,int* pasos,int *distanci
     for (int i = 0; i < 3; i++) {
         if (actual->connections[i].node != NULL) {
             visitado++;
-            *distancia+=actual->connections[i].dist;
+            *distancia+=actual->connections[i].dist;  //suma la distancia cada vez que recorro.
             if(visitado>1){
                 printf("%s",sangria);
             }
@@ -117,7 +117,7 @@ void shortestPath(Node_t* primerNodo,Node_t* ultimoNodo,int* pasos,int *distanci
             (*pasos)++;
             shortestPath(actual->connections[i].node, ultimoNodo, pasos, distancia, menorDistancia);
             
-            *distancia -= actual->connections[i].dist;
+            *distancia -= actual->connections[i].dist; //Cuando termino todas las recursividades distancia arranca de cero.
         }
     }
 

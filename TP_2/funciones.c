@@ -29,7 +29,7 @@ int CrearUsuario(){
     }
     while (fread(&usuario, sizeof(usuario_t), 1, archivo)) {
         if(strcmp(usuario.nombre, nombre_ingresado) == 0){
-            printf("El nombre de ya se encuentra utilizado, proba otro.\n");
+            printf("El nombre ya se encuentra utilizado, proba otro.\n");
             fclose(archivo);
             return fallo;
             

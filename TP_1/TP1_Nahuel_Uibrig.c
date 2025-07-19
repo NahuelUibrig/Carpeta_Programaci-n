@@ -79,7 +79,7 @@ int main(void){
             default:
                 printf("Desconocido\n");
         }
-  printf("Edad de la mascota mas vieja: %.faños\n", mascota_masvieja.edad); 
+  printf("Edad de la mascota mas vieja: %.0faños\n", mascota_masvieja.edad); 
   fclose(archivo);
   
   /* USER CODE END Ejercicio 1 */
@@ -134,10 +134,10 @@ int main(void){
       printf("%-5d", mascota.id);
       printf("             ");
       for (int i = 2; i >= 0; i--) {
-      printf("%d", (mascota.id >> i) & 1);  // Imprime cada bit de los 3 bits más significativos
+      printf("%d", (id_decimal >> i) & 1);  // Imprime cada bit de los 3 bits más significativos// corregido, usaba id.mascota
       }
 
-      mascota.id = ((mascota.especie & 0b000000000111) << 13) | (mascota.id & 0b0000111111111111);
+      mascota.id = ((mascota.especie & 0b000000000111) << 13) | (mascota.id & 0b0001111111111111);// Corregido le faltaba un 1
       errores++;
       printf("\n");
     }
@@ -176,7 +176,7 @@ int main(void){
   }
   printf("Ingrese la especie que desea buscar, opciones:\n");
   printf("PERRO\nGATO\nTORTUGA\nCONEJO\nPAJARO\n");
-  scanf("%s", especie_palabra);
+  scanf("%9s", especie_palabra);                             // Correccion, limito la palabra a 9 caracteres
   printf("\nEspecie ingresada: %s\n", especie_palabra);
   if (strcmp(especie_palabra, "PERRO") == 0) {
     especie_ingresada = PERRO;
